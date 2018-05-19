@@ -35,6 +35,9 @@
     },
     "rules": {
       "indent": ["error", 4],
-      "react/jsx-indent": ["enabled", 4]
+      "react/jsx-indent": ["enabled", 4],
+      "react/jsx-indent-props": ["enabled", 4],
+      "no-underscore-dangle": ["error",{ "allowAfterThis": true } ],
+      "arrow-parens": "off"
     }
   }

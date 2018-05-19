@@ -4,6 +4,7 @@ import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
 
 import Main from 'pages/main';
 import NotFound from 'pages/404';
+import Disk from 'pages/disk';
 
 import styles from './styles.less'; // eslint-disable-line no-unused-vars
 
@@ -19,6 +20,7 @@ class App extends React.Component<Object> {
                 <Switch>
                     <Route exact path="/" component={Main} />
                     <Route exact path="/404" component={NotFound} />
+                    <Route path="/disk" component={Disk} />
                     <Redirect from="*" to="/404" />
                 </Switch>
             </div>
