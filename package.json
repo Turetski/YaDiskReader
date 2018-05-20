@@ -1,10 +1,11 @@
 {
   "name": "testcase-yadisk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "training task",
   "main": "index.js",
   "scripts": {
     "start": "yarn install && webpack-dev-server --open --inline --hot",
+    "startnpm": "npm install && webpack-dev-server --open --inline --hot",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint src server"
   },

@@ -1,9 +1,10 @@
 const initialState = {
-    path: null,
+    path: '',
     data: [],
     metadata: {},
     error: null,
     isLoaded: false,
+    name: '',
 };
 
 export default (state = initialState, action) => {

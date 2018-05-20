@@ -1,0 +1,40 @@
+.wrapper {
+    list-style: none;
+
+    .glyphicon.type {
+        display: none;
+    }
+
+    &.dir {
+        cursor: pointer;
+        border-radius: 6px;
+
+        &:hover {
+            background-color: aqua;
+        }
+
+        .glyphicon.type{
+            display: inline-block;
+            vertical-align: baseline;
+            margin-right: 12px;
+        }
+    }
+
+    &.back {
+        cursor: pointer;
+        border-radius: 6px;
+        font-size: 20px;
+        line-height: 20px;
+        font-weight: 900;
+
+        &:hover {
+            background-color: aqua;
+        }
+    }
+
+    .name {
+        display: inline-block;
+        vertical-align: baseline;
+        width: 360px;
+    }
+}

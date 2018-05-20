@@ -1,51 +1,81 @@
 import * as React from 'react';
-import { Button, Alert } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { withRouter } from 'react-router-dom';
 
+import queryParse from 'utils/query-parse';
+
 import fetchData from 'actions/fetch-data';
 
 import Loader from './views/loader';
 import DataList from './views/data-list';
-import styles from './styles.less'; // eslint-disable-line no-unused-vars
+import Error from './views/error';
 
 class MainPage extends React.Component {
     componentDidMount() {
-        const { authToken } = this.props;
+        this.fetchData();
+    }
 
-        if (authToken) {
-            this.props.actions.fetchData();
+    componentDidUpdate(prevProps) {
+        if (prevProps.location.key !== this.props.location.key) {
+            this.fetchData();
         }
     }
 
-    handleClickAuthorization = () => {
+    fetchData = () => {
+        const { authToken, location } = this.props;
+
+        const path = queryParse(location.search).path || '/';
+
+        if (authToken) {
+            this.props.actions.fetchData(path);
+        }
+    }
+
+    handleClickBack = () => {
         this.props.history.replace({
             pathname: '/',
         });
     }
 
     render() {
-        const { authToken, isLoaded, data } = this.props;
+        const {
+            authToken,
+            isLoaded,
+            data,
+            error,
+            path,
+            name
+        } = this.props;
+        const parentPath = path.replace(`/${name}`, '');
+        const needBackBtn = (path !== '/') && !error;
 
         return (
             <React.Fragment>
                 <h1>Просмотр диска</h1>
                 {!authToken && (
-                    <Alert bsStyle="danger">
-                        Не удалось авторизоваться на Yandex.Disk
-                        <Button
-                            bsStyle="danger"
-                            className="btn-auth"
-                            onClick={this.handleClickAuthorization}
-                        >
-                            Авторизоваться
-                        </Button>
-                    </Alert>
+                    <Error
+                        title="Не удалось авторизоваться на Yandex.Disk"
+                        btnLabel="Авторизоваться"
+                        onBtnClick={this.handleClickBack}
+                    />
                 )}
                 {authToken && !isLoaded && <Loader />}
-                {authToken && isLoaded && <DataList data={data} />}
+                {authToken && isLoaded && (
+                    <DataList
+                        data={data}
+                        parentPath={parentPath}
+                        needBackBtn={needBackBtn}
+                    />
+                )}
+                {error && (
+                    <Error
+                        title={error}
+                        btnLabel="На главную"
+                        onBtnClick={this.handleClickBack}
+                    />
+                )}
             </React.Fragment>
         );
     }
@@ -64,5 +94,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default compose(
     withRouter,
-    connect(mapStateToProps, mapDispatchToProps)
+    connect(mapStateToProps, mapDispatchToProps),
 )(MainPage);

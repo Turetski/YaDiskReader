@@ -1,13 +1,4 @@
-// @flow
-
-type Key = string | number;
-interface Storage {
-    setItem: Function,
-    getItem: Function,
-    removeItem: Function
-}
-
-export const HasLocalStorage = (): boolean => {
+export const HasLocalStorage = () => {
     try {
         const { localStorage } = window;
         const uid = new Date();
@@ -22,19 +13,19 @@ export const HasLocalStorage = (): boolean => {
     }
 };
 
-export class DefaultStorage implements Storage {
+export class DefaultStorage {
     _store: Object;
 
     constructor() {
         this._store = {};
     }
 
-    getItem = (key: Key) => (
+    getItem = (key) => (
         key in this._store ? this._store[key] : undefined
     );
 
 
-    setItem = (key: Key, value: any) => {
+    setItem = (key, value) => {
         const val = String(value);
 
         this._store[key] = val;
@@ -42,7 +33,7 @@ export class DefaultStorage implements Storage {
         return val;
     };
 
-    removeItem = (key: Key) => (
+    removeItem = (key) => (
         delete this._store[key]
     );
 
@@ -56,7 +47,7 @@ export class DefaultStorage implements Storage {
 export default class UserStorage {
     _store: Storage;
 
-    constructor(store?: Storage) {
+    constructor(store) {
         if (store) {
             this._store = store;
         }
@@ -70,37 +61,37 @@ export default class UserStorage {
         this._store = window.localStorage;
     }
 
-    getItem(key: Key): string {
+    getItem(key) {
         return this._store.getItem(key);
     }
 
-    setItem(key: Key, value: any) {
+    setItem(key, value) {
         this._store.setItem(key, value);
     }
 
-    removeItem(key: Key) {
+    removeItem(key) {
         this._store.removeItem(key);
     }
 }
 
 export class StoredData extends UserStorage {
-    _key: Key;
+    _key;
 
-    constructor(key: Key, store?: Storage) {
+    constructor(key, store) {
         super(store);
 
         this._key = key;
     }
 
-    getItem(): string {
+    getItem() {
         return super.getItem(this._key);
     }
 
-    setItem(value: any) {
+    setItem(value) {
         super.setItem(this._key, value);
     }
 
-    setItemIdle(value: any) {
+    setItemIdle(value) {
         super.setItemIdle(this._key, value);
     }
 

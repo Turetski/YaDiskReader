@@ -1,6 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Switch, Route, withRouter, Redirect } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+
+import { LocalStorage } from 'utils/user-storage';
+
+import saveToken from 'actions/save-token';
 
 import Main from 'pages/main';
 import NotFound from 'pages/404';
@@ -10,8 +15,14 @@ import styles from './styles.less'; // eslint-disable-line no-unused-vars
 
 
 class App extends React.Component<Object> {
-    componentDidMount() {
-        console.log('I`ve mounted'); // eslint-disable-line no-console
+    constructor(props) {
+        super();
+
+        const authToken = LocalStorage.getItem('token');
+
+        if (authToken) {
+            props.actions.saveToken(authToken);
+        }
     }
 
     render() {
@@ -28,4 +39,10 @@ class App extends React.Component<Object> {
     }
 }
 
-export default withRouter(connect()(App));
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators({
+        saveToken,
+    }, dispatch),
+});
+
+export default withRouter(connect(null, mapDispatchToProps)(App));

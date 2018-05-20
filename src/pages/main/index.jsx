@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import generateDeviceId from 'utils/generate-device-id';
+import { LocalStorage } from 'utils/user-storage';
 
 import saveToken from 'actions/save-token';
 
@@ -16,9 +17,11 @@ class MainPage extends React.Component {
         const token = get(/access_token=([^&]+)/.exec(document.location.hash), '[1]');
 
         if (token) {
+            LocalStorage.setItem('token', token);
+
             this.props.actions.saveToken(token);
 
-            this.props.history.replace({
+            this.props.history.push({
                 pathname: '/disk',
             });
         }
