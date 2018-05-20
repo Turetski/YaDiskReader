@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom';
 
 import fetchData from 'actions/fetch-data';
 
+import Loader from './views/loader';
+import DataList from './views/data-list';
 import styles from './styles.less'; // eslint-disable-line no-unused-vars
 
 class MainPage extends React.Component {
@@ -25,8 +27,8 @@ class MainPage extends React.Component {
     }
 
     render() {
-        const { authToken } = this.props;
-        console.log(this.props);
+        const { authToken, isLoaded, data } = this.props;
+
         return (
             <React.Fragment>
                 <h1>Просмотр диска</h1>
@@ -42,9 +44,8 @@ class MainPage extends React.Component {
                         </Button>
                     </Alert>
                 )}
-                {authToken && (
-                    <span>Удалось авторизоваться на Yandex.Disk</span>
-                )}
+                {authToken && !isLoaded && <Loader />}
+                {authToken && isLoaded && <DataList data={data} />}
             </React.Fragment>
         );
     }
