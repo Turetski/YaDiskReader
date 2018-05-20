@@ -24,10 +24,6 @@ class MainPage extends React.Component {
         }
     }
 
-    componentWillReceiveProps(nextProps) {
-        console.log(2222, nextProps.authToken);
-    }
-
     handleClickConnect = () => {
         const deviceId = generateDeviceId();
         const url = `${YA_OAUTH}&client_id=${APP_ID}&deviceId=${deviceId}&redirect_uri=${CALLBACK_URL}`;

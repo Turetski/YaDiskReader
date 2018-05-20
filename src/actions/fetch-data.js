@@ -1,28 +1,36 @@
 import requestApi from 'utils/request-api';
 
-export default() => (dispatch, getState) =>
-    requestApi('resources?pdfath=/', getState().authToken).then((response) =>
-        response.json().then((json) => {
+import { REQUEST_FIELDS } from 'constants/urls';
+
+export default(path = '/') => (dispatch, getState) => {
+    dispatch({
+        type: 'DATA_LOADING',
+    });
+
+    return requestApi(`resources?path=${path}&fields=${REQUEST_FIELDS}`, getState().authToken)
+        .then((json) => {
             const {
                 limit,
                 offset,
                 total,
                 items,
-            } = json.embedded;
-            console.log('im here');
-            return {
-                type: 'ROOT_DATA_LOADING_SUCCEESS',
-                data: items,
-                metadata: {
-                    limit,
-                    offset,
-                    total,
+                path
+            } = json._embedded;
+
+            return dispatch({
+                type: 'DATA_LOADING_SUCCEESS',
+                payload: {
+                    path: path.substring(5),
+                    data: items,
+                    metadata: {
+                        limit,
+                        offset,
+                        total,
+                    },
                 },
-            };
-        }, () => ({
-            type: 'ROOT_DATA_LOADING_FAIL',
-            error: {
-                code: 500,
-                message: 'Ответ сервера содержит некорректные данные',
-            },
-        })));
+            });
+        }).catch((error) => dispatch({
+            type: 'DATA_LOADING_FAILURE',
+            payload: error,
+        }));
+};

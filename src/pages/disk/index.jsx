@@ -26,7 +26,7 @@ class MainPage extends React.Component {
 
     render() {
         const { authToken } = this.props;
-
+        console.log(this.props);
         return (
             <React.Fragment>
                 <h1>Просмотр диска</h1>
@@ -52,6 +52,7 @@ class MainPage extends React.Component {
 
 const mapStateToProps = (state) => ({
     authToken: state.authToken,
+    ...state.diskData,
 });
 
 const mapDispatchToProps = (dispatch) => ({
